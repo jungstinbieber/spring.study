@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thyeleaf.org">
+<head>
+<th:block th:insert="~{fragments/common :: head('title작성')}"> </th:block>
+</head>
+<body>
+
+	
+	
+	<nav th:replace="~{fragments/common :: header}"></nav>
+	 
+	 <!-- 실제 작업할 영역 -->
+	 <div class="container border py-3 mt-3">
+    <div>
+      <h3 th:text="${post.title}">게시물 제목</h3>
+    </div>
+    <div>
+      <p th:utext="${post.content}">게시물 내용</p>
+    </div>
+    <div>
+      <p>포스트 번호 : <span th:text="${post.id}"></span> 1</p>
+      <p>작성자 : xxxx<span th:text="${post.user.username}"></span></p>
+    </div>
+    <hr>
+    <button class="btn btn-secondary" onclick="history.back()">돌아가기</button>
+    <a th:href="@{|/post/update/${post.id}|}" class="btn btn-warning">수정하기</a>
+    <button id="btn-delete" class="btn btn-danger">삭제하기</button>
+  </div>
+	 
+
+	<div th:replace="~{fragments/common :: footer}"></div>
+<th:block th:insert="~{fragments/common :: scripts}"></th:block>
+<script src="/js/post.js"></script>
+</body>
+</html>
