@@ -88,13 +88,13 @@ const postObject = {
 	deletePost: function(){
 		const id = document.querySelector('.id').innerHTML;
 		
-		fetch('/post/${id}',{
+		fetch(`/post/${id}`,{
 			method:'DELETE',
 						
 		})
-		.then(response => respnse.json())
+		.then(response => response.json())
 		.then(result =>{
-			alert(result.date);
+			alert(result.data);
 			
 			window.location.href="/";
 		}).catch(error =>{

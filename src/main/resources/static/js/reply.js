@@ -32,7 +32,26 @@ const replyObject = {
         }).catch(error => { // catch 구문 수정
             console.log(error);
         })
-    }
+    },
+
+}
+
+const replyBtns = document.querySelectorAll('.btn-delete-reply');
+for(let i=0; i<replyBtns.length; i++){
+	replyBtns[i].addEventListener('click',(e)=>{
+		const id = e.target.dataset.replyId
+		
+		fetch(`/reply/${id}`,{
+			method: 'DELETE'
+		}).then(response => response.json())
+		.then(result=>{
+			alert(result.data);
+			
+			location.reload();
+		}).catch(error=>{
+			console.log(error)
+		})
+	})
 }
 
 replyObject.init();

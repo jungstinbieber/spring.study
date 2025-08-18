@@ -28,4 +28,8 @@ public class ReplyService {
 		
 		replyRepository.save(reply);
 	}
+	
+	public void deleteReply(int replyId) {
+		replyRepository.deleteById(replyId);
+	}
 }

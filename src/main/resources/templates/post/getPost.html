@@ -18,7 +18,7 @@
       <p th:utext="${post.content}">게시물 내용</p>
     </div>
     <div>
-      <p>포스트 번호 : <span th:text="${post.id}"></span> 1</p>
+      <p>포스트 번호 : <span class="id" th:text="${post.id}"></span> 1</p>
       <p>작성자 : xxxx<span th:text="${post.user.username}"></span></p>
     </div>
     <hr>
@@ -29,13 +29,39 @@
     </th:block>
     
     <!-- 댓글영역 -->
+          <br> <br>
+      <div class="container mt-3">
+        <table class="table">
+          <thead>
+            <tr>
+              <th width="75%">내용</th>
+              <th width="10%">작성자</th>
+              <th width="15%">삭제</th>
+            </tr>
+          </thead>
+          <tbody>
+          <th:block th:each="reply : ${post.replyList}">
+              <tr>
+                <td th:text="${reply.content}">댓글내용들어감</td>
+                <td th:text="${reply.user.username}">댓글작성자들어감</td>
+                <td>
+                	<th:block th:if="${reply.user.username == session.principal.username}">
+                	<button class="btn btn-danger btn-delete-reply"
+              	  th:data-reply-id="${reply.id}">삭제</button></td>
+                </th:block>
+              </tr>
+            </th:block>
+          </tbody>
+        </table>
+      </div>
     
-          <br>
-    <br>
+    
+   <br> 
+   <br>
     <div class="container mt-3">
       <input type="hidden" id="postId" th:value="${post.id}">
       <table class="table">
-        <thead>
+        <thead >
           <tr>
             <th><h4>댓글 목록</h4></th>
           </tr>
@@ -56,6 +82,8 @@
 	<div th:replace="~{fragments/common :: footer}"></div>
 	<th:block th:insert="~{fragments/common :: scripts}"></th:block>
 	<script src="/js/post.js"></script>
+	
 	<script src="/js/reply.js"></script>
+	
 </body>
 </html>
