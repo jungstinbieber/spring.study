@@ -43,12 +43,29 @@ const userobject ={
 			body: JSON.stringify(user)
 		}).then(response => response.json())
 		.then(json => {
-			alert(json.data);
 			
-			if(json.status == 400)
-				return;
+			if(json.status == 200){
+				alert(json.data);
+				
+				window.location.href="/";
+			}else{
+				let msg='';
+				let errors = json.data;
+				
+				if(typeof errors == 'string')
+					msg = errors;
+				
+				if(errors.username != null)
+					msg += errors.username + '\n'
+				if(errors.password !=null)
+					msg += errors.password + '\n'
+				if(errors.email != null)
+					msg += errors.email
+				
+				alert(msg)
+			}
+				
 			
-			window.location.href="/";
 		}).catch(error=>{
 			console.error("회원 가입 중 오류 발생", error);
 		})

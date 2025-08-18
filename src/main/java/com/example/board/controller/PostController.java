@@ -1,8 +1,11 @@
 package com.example.board.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,7 +13,10 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,15 +27,21 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.board.domain.PageDTO;
 import com.example.board.domain.Post;
+import com.example.board.domain.PostDTO;
 import com.example.board.domain.ResponseDTO;
 import com.example.board.domain.User;
 import com.example.board.service.PostService;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 
 @Controller
 public class PostController {
 
-    private final PostService postService;
+	@Autowired
+    private PostService postService;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
 	@Autowired
     private PostRepository postRepository;
@@ -47,14 +59,26 @@ public class PostController {
 	
 	@PostMapping("/post")
 	@ResponseBody // json으로 응답하기에 필요
-	public ResponseDTO<?> postinsert(@RequestBody Post post, HttpSession session) {
+	public ResponseDTO<?> postinsert(@Valid @RequestBody PostDTO postDTO, BindingResult bindingresult, HttpSession session) {
+		if(bindingresult.hasErrors()) {
+			
+			Map<String, String>errorMap = new HashMap<>();
+			
+			for(FieldError error : bindingresult.getFieldErrors()) {
+				errorMap.put(error.getField(), error.getDefaultMessage());
+			}
+			return new ResponseDTO<>(HttpStatus.BAD_REQUEST.value(),errorMap);
+		}
+		
+		Post post = modelMapper.map(postDTO, Post.class);
+		
 		User writer = (User)session.getAttribute("principal");
 		
 		postService.InsertPost(post,writer);
 		
 		return new ResponseDTO<>(HttpStatus.OK.value(), "새 게시글 등록 완료");
+		
 	}
-	
 	// Model 에 객체를 담음
 	// return index 스프링 내부에서는 index.html을 열어 
 	// html 파일에 내용물들을 렌더링을 함

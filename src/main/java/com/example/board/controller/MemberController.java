@@ -1,9 +1,15 @@
 package com.example.board.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,9 +19,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.board.domain.ResponseDTO;
 import com.example.board.domain.User;
+import com.example.board.domain.UserDTO;
 import com.example.board.service.MemberService;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 
 
 @Controller
@@ -25,6 +33,9 @@ public class MemberController {
 
 	@Autowired
 	private MemberService memberService;
+	
+	@Autowired
+	private ModelMapper modelMapper;
 
     MemberController(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -38,7 +49,24 @@ public class MemberController {
 	
 	@PostMapping("/auth/join")
 	@ResponseBody
-	public ResponseDTO<?> insertUser(@RequestBody User user) {
+	public ResponseDTO<?> insertUser(@Valid @RequestBody UserDTO userDTO, BindingResult bindingResult) {
+		
+		if(bindingResult.hasErrors()) {
+			Map<String, String>errorMap= new HashMap<>();
+			
+			for(FieldError error : bindingResult.getFieldErrors()) {
+				errorMap.put(error.getField(), error.getDefaultMessage());
+			}
+			
+			return new ResponseDTO<>(HttpStatus.BAD_REQUEST.value(),errorMap);
+		}
+		
+		User user = modelMapper.map(userDTO, User.class);
+		
+		//modelMapper를 안쓰고 하려면
+		// user.setUsername(userDTO.getUsername());
+		// user.setPassword(userDTO.getPassword());
+		
 		User findUser = memberService.getUser(user.getUsername());
 		
 		if(findUser.getUsername()==null) {
