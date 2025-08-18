@@ -115,7 +115,7 @@ public class PostController {
 	public ResponseDTO<String> delete (@PathVariable int id) {
 		postRepository.deleteById(id);
 		
-		return new ResponseDTO<>(HttpStatus.OK.value(), "삭제 완료");
+		return new ResponseDTO<>(HttpStatus.OK.value(), id + "삭제 완료");
 	}
 	
 }

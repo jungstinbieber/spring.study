@@ -23,13 +23,39 @@
     </div>
     <hr>
     <button class="btn btn-secondary" onclick="history.back()">돌아가기</button>
-    <a th:href="@{|/post/update/${post.id}|}" class="btn btn-warning">수정하기</a>
-    <button id="btn-delete" class="btn btn-danger">삭제하기</button>
+    <th:block th:if="${post.user.username == session.principal.username}">
+	    <a th:href="@{|/post/update/${post.id}|}" class="btn btn-warning">수정하기</a>
+	    <button id="btn-delete" class="btn btn-danger">삭제하기</button>
+    </th:block>
+    
+    <!-- 댓글영역 -->
+    
+          <br>
+    <br>
+    <div class="container mt-3">
+      <input type="hidden" id="postId" th:value="${post.id}">
+      <table class="table">
+        <thead>
+          <tr>
+            <th><h4>댓글 목록</h4></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr align="right">
+            <td>
+              <textarea id="reply-content" rows="1" class="form-control"></textarea>
+              <button id="btn-save-reply" class="btn btn-secondary mt-3">댓글등록</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 	 
 
 	<div th:replace="~{fragments/common :: footer}"></div>
-<th:block th:insert="~{fragments/common :: scripts}"></th:block>
-<script src="/js/post.js"></script>
+	<th:block th:insert="~{fragments/common :: scripts}"></th:block>
+	<script src="/js/post.js"></script>
+	<script src="/js/reply.js"></script>
 </body>
 </html>

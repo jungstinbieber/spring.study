@@ -1,7 +1,6 @@
 package com.example.board.domain;
 
 import java.sql.Timestamp;
-import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -12,41 +11,32 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OrderBy;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity
-public class Post {
+public class Reply {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
-	@Column(nullable=false, length=100)
-	private String title;
-	
-	@Lob
-	@Column(nullable=false)
+	@Column(nullable = false, length=200)
 	private String content;
 	
 	@CreationTimestamp
-	private Timestamp creataDate;
-	
-	private int cnt;
+	private Timestamp createDate;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "userid")
+	@JoinColumn(name= "userid")
 	private User user;
 	
-	@OneToMany(mappedBy = "post" , fetch=FetchType.EAGER)
-	@OrderBy("id desc")
-	private List<Reply> replyList;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "postid")
+	private Post post;
 }

@@ -11,6 +11,7 @@ const postObject = {
 		const btnInsert = document.getElementById('btn-insert');
 		const btnUpdate = document.getElementById('btn-update');
 		const btnDelete = document.getElementById('btn-delete');
+		
 	
 		
 		if(btnInsert){
@@ -36,6 +37,8 @@ const postObject = {
 				this.deletePost();
 			})
 		}
+		
+		
 	},
 	
 	insertPost: function(){
@@ -98,6 +101,7 @@ const postObject = {
 			console.log(error);
 		})
 	}
+	
 	
 }
 
