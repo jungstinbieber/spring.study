@@ -51,15 +51,15 @@ public class MemberController {
 	@ResponseBody
 	public ResponseDTO<?> insertUser(@Valid @RequestBody UserDTO userDTO, BindingResult bindingResult) {
 		
-		if(bindingResult.hasErrors()) {
-			Map<String, String>errorMap= new HashMap<>();
+//		if(bindingResult.hasErrors()) {
+//			Map<String, String>errorMap= new HashMap<>();
+//			
+//			for(FieldError error : bindingResult.getFieldErrors()) {
+//				errorMap.put(error.getField(), error.getDefaultMessage());
+//			}
 			
-			for(FieldError error : bindingResult.getFieldErrors()) {
-				errorMap.put(error.getField(), error.getDefaultMessage());
-			}
-			
-			return new ResponseDTO<>(HttpStatus.BAD_REQUEST.value(),errorMap);
-		}
+//			return new ResponseDTO<>(HttpStatus.BAD_REQUEST.value(),errorMap);
+//		}
 		
 		User user = modelMapper.map(userDTO, User.class);
 		

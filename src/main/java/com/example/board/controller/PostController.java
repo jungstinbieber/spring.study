@@ -60,15 +60,15 @@ public class PostController {
 	@PostMapping("/post")
 	@ResponseBody // json으로 응답하기에 필요
 	public ResponseDTO<?> postinsert(@Valid @RequestBody PostDTO postDTO, BindingResult bindingresult, HttpSession session) {
-		if(bindingresult.hasErrors()) {
-			
-			Map<String, String>errorMap = new HashMap<>();
-			
-			for(FieldError error : bindingresult.getFieldErrors()) {
-				errorMap.put(error.getField(), error.getDefaultMessage());
-			}
-			return new ResponseDTO<>(HttpStatus.BAD_REQUEST.value(),errorMap);
-		}
+//		if(bindingresult.hasErrors()) {
+//			
+//			Map<String, String>errorMap = new HashMap<>();
+//			
+//			for(FieldError error : bindingresult.getFieldErrors()) {
+//				errorMap.put(error.getField(), error.getDefaultMessage());
+//			}
+//			return new ResponseDTO<>(HttpStatus.BAD_REQUEST.value(),errorMap);
+//		}
 		
 		Post post = modelMapper.map(postDTO, Post.class);
 		

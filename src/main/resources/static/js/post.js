@@ -18,7 +18,7 @@ const postObject = {
 			btnInsert.addEventListener('click', (e)=>{
 				e.preventDefault();
 				
-				if(confirm('정말로 수정하시겠습니까?'))
+				if(confirm('정말로 등록하시겠습니까?'))
 				
 				this.insertPost();
 			})
