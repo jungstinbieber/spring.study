@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
@@ -30,6 +31,7 @@ import com.example.board.domain.Post;
 import com.example.board.domain.PostDTO;
 import com.example.board.domain.ResponseDTO;
 import com.example.board.domain.User;
+import com.example.board.security.UserDetailsImpl;
 import com.example.board.service.PostService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -59,7 +61,7 @@ public class PostController {
 	
 	@PostMapping("/post")
 	@ResponseBody // json으로 응답하기에 필요
-	public ResponseDTO<?> postinsert(@Valid @RequestBody PostDTO postDTO, BindingResult bindingresult, HttpSession session) {
+	public ResponseDTO<?> postinsert(@Valid @RequestBody PostDTO postDTO, BindingResult bindingresult,@AuthenticationPrincipal UserDetailsImpl principal) {
 //		if(bindingresult.hasErrors()) {
 //			
 //			Map<String, String>errorMap = new HashMap<>();
@@ -72,7 +74,8 @@ public class PostController {
 		
 		Post post = modelMapper.map(postDTO, Post.class);
 		
-		User writer = (User)session.getAttribute("principal");
+		User writer = principal.getUser();
+		
 		
 		postService.InsertPost(post,writer);
 		

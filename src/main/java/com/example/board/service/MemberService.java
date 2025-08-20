@@ -3,6 +3,7 @@ package com.example.board.service;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,6 +17,9 @@ public class MemberService {
 	
 	@Autowired //의존성 주입
 	private UserRepository userRepository;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	// 컨트롤러에서 회원가입 정보를 받아와서
 	// 권한을 부여하고 db에 삽입해주는 메서드
@@ -23,6 +27,10 @@ public class MemberService {
 	@Transactional
 	public void insertUser(User user) {
 		user.setRole(RoleType.USER);
+		// 회원가입 시 전달받은 비밀번호를 패스워드인코더를 활용해 암호화 처리
+		String pw = passwordEncoder.encode(user.getPassword());
+		// 암호화된 비밀번호를 user객체에 다시 넣어줌
+		user.setPassword(pw);
 		
 		userRepository.save(user);
 	}
@@ -43,10 +51,12 @@ public class MemberService {
 		User findUser = userRepository.findById(user.getId()).get();
 		
 		findUser.setUsername(user.getUsername());
-		findUser.setPassword(user.getPassword());
+		
+		String pw = passwordEncoder.encode(user.getPassword());
+		findUser.setPassword(pw);
 		findUser.setEmail(user.getEmail());
 		
-		userRepository.save(findUser);
+		
 		
 		return findUser;
 	}

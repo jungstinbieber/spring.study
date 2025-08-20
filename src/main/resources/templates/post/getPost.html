@@ -23,7 +23,7 @@
     </div>
     <hr>
     <button class="btn btn-secondary" onclick="history.back()">돌아가기</button>
-    <th:block th:if="${post.user.username == session.principal.username}">
+    <th:block th:if="${post.user.username == #authentication.principal.username}">
 	    <a th:href="@{|/post/update/${post.id}|}" class="btn btn-warning">수정하기</a>
 	    <button id="btn-delete" class="btn btn-danger">삭제하기</button>
     </th:block>
@@ -45,7 +45,7 @@
                 <td th:text="${reply.content}">댓글내용들어감</td>
                 <td th:text="${reply.user.username}">댓글작성자들어감</td>
                 <td>
-                	<th:block th:if="${reply.user.username == session.principal.username}">
+                	<th:block th:if="${reply.user.username == #authentication.principal.username}">
                 	<button class="btn btn-danger btn-delete-reply"
               	  th:data-reply-id="${reply.id}">삭제</button></td>
                 </th:block>
